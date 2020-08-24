@@ -7,12 +7,17 @@ export const HomeScreen = (props) => {
   const navigation = useNavigation()
 
   const renderList = ({item}) =>(
-    <ListItem id={item.id} 
+    <ListItem 
+    id={item.id} 
     amount ={item.amount} 
-    category={item.category} />
+    category={item.category} 
+    clickHandler = {showDetail}
+    item ={item}
+    />
   )
 
-  const showDetail = (item) =>{
+  const showDetail = (item) => {
+    navigation.navigate("Detail", item )
 
   }
   return (
@@ -30,10 +35,12 @@ export const HomeScreen = (props) => {
 
 const ListItem =(props) => {
   return (
+    <TouchableOpacity onPress={()=> props.clickHandler(props.item) }>
     <View style ={homeStyle.item}>
       <Text>{props.category}</Text>
       <Text>${props.amount}</Text>
     </View>
+    </TouchableOpacity>
   )
 }
 
@@ -44,6 +51,6 @@ const homeStyle = StyleSheet.create({
     borderBottomWidth:1,
     borderBottomColor:'#cccccc',
     flexDirection: 'row',
-    justifyContent:"flex-start"
+    justifyContent:"space-between",
   }
 })
