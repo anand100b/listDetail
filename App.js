@@ -4,8 +4,17 @@ import { StyleSheet, Text, View } from 'react-native';
 import {NavigationContainer, StackActions} from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
+//firebase config
+import {firebaseConfig} from './config/firebase'
+//firebase library
+import * as firebase from 'firebase'
+
+//firebase initialise app
+firebase.initializeApp( firebaseConfig )
+
 import { HomeScreen } from './components/HomeScreen'
 import { DetailScreen } from './components/DetailScreen'
+import { AuthScreen } from './components/AuthScreen'
 
 const Data =[
   {  "amount": 50,
