@@ -10,8 +10,9 @@ import {firebaseConfig} from './config/firebase'
 import * as firebase from 'firebase'
 
 //firebase initialise app
+if(!firebase.apps.length){
 firebase.initializeApp( firebaseConfig )
-
+}
 import { HomeScreen } from './components/HomeScreen'
 import { DetailScreen } from './components/DetailScreen'
 import { AuthScreen } from './components/AuthScreen'
@@ -52,10 +53,29 @@ const Data =[
 ]
 
 export default function App() {
+
+  
   const listData = Data
+
+  const register = (email, password) =>{
+    firebase.auth().createUserWithEmailAndPassword (email, password)
+    .catch(error => console.log(error) )
+  }
+
+  firebase.auth().onAuthStateChanged( (user) =>  {
+    if( user ) {
+      console.log('user logged in')
+    }
+    else{
+      console.log('user not logged in')
+    }
+  } )
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="Register">
+          {(props) => <Auth}
+        </Stack.Screen>
         <Stack.Screen name ="Home" >
           { (props) => <HomeScreen {...props} text="Hello Home Screen" data={listData}/>}
         </Stack.Screen>
