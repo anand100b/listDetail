@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Button, FlatList } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { TextInput } from 'react-native-gesture-handler'
@@ -14,20 +14,41 @@ export const HomeScreen = (props) => {
     {label: "Bills", value: "bills"},
   ]
 
+  useEffect(()=>{
+    console.log(props.data)
+  })
+
   const [category,setCategory] = useState(null)
   const [amount,setAmount] = useState(0)
   const [note,setNote] = useState(null)
 
-  const [validAmount, setValidation ] = useState(false)
+  const [validAmount,setValidAmount] = useState(false)
+
   const navigation = useNavigation()
-const validateAmount = (amount ) => {
-  if(parseFloat(amount)){
-    setValidAmount(true)
+
+  const validateAmount = (amount) => {
+    if( parseFloat(amount) ) {
+      setValidAmount(true)
+      setAmount(amount)
+    }
+    else {
+      setValidAmount(false)
+    }
   }
-  else{
-    setValidAmount(false)
+
+  const addItem = () => {
+    const itemId = new Date().getTime()
+    const itemAmount = amount
+    const itemCategory = category
+    const itemNote = note
+    props.add({
+      id: itemId,
+      amount: itemAmount,
+      category: itemCategory,
+      note: itemNote
+    })
   }
-}
+
   const renderList = ({item}) => (
     <ListItem 
     id={item.id} 
@@ -48,7 +69,7 @@ const validateAmount = (amount ) => {
         <TextInput 
         style={homeStyle.input} 
         placeholder="amount" 
-        onChangeText={ (amount) => setAmount(amount) }
+        onChangeText={ (amount) => validateAmount(amount) }
         />
         <Select items={selectItems} onSelect={setCategory} />
         <TextInput 
@@ -56,11 +77,12 @@ const validateAmount = (amount ) => {
           placeholder="notes" 
           onChangeText={ (note) => setNote(note)}
         />
-        <TouchableOpacity
-         style = {!validAmount || !category ? homeStyle.buttonDisaled : homeStyle.button}
-         disabled ={ !validAmount || !category ? true : false}
-         >
-          <Text style ={homeStyle.buttonText}>Add</Text>
+        <TouchableOpacity 
+          style={ validAmount && category ? homeStyle.button : homeStyle.buttonDisabled }
+          disabled={ validAmount && category ? false : true }
+          onPress={ () => { addItem() } }
+        >
+          <Text style={homeStyle.buttonText}>Add</Text>
         </TouchableOpacity>
       </View>
       <FlatList
@@ -104,20 +126,18 @@ const homeStyle = StyleSheet.create({
     backgroundColor: '#ffffff',
     marginVertical: 15,
   },
-
-  button:{
-backgroundColor:'#33ffcc',
-padding: 10,
-boirderRadius : 10,
-
+  button: {
+    backgroundColor: '#33ffcc',
+    padding: 10,
+    borderRadius: 10,
   },
-   buttonDisaled : {
-backgroundColor: '#c0f9eb',
-padding : 10,
-borderRadius:10,
-   },
-  buttonText :{
-    textAlign :'center',
-    color:'#333333',
-  }
+  buttonDisabled: {
+    backgroundColor: '#c0f9eb',
+    padding: 10,
+    borderRadius: 10,
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: '#333333',
+  },
 })
