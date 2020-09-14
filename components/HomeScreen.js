@@ -18,8 +18,16 @@ export const HomeScreen = (props) => {
   const [amount,setAmount] = useState(0)
   const [note,setNote] = useState(null)
 
+  const [validAmount, setValidation ] = useState(false)
   const navigation = useNavigation()
-
+const validateAmount = (amount ) => {
+  if(parseFloat(amount)){
+    setValidAmount(true)
+  }
+  else{
+    setValidAmount(false)
+  }
+}
   const renderList = ({item}) => (
     <ListItem 
     id={item.id} 
@@ -48,8 +56,11 @@ export const HomeScreen = (props) => {
           placeholder="notes" 
           onChangeText={ (note) => setNote(note)}
         />
-        <TouchableOpacity>
-          <Text>Add</Text>
+        <TouchableOpacity
+         style = {!validAmount || !category ? homeStyle.buttonDisaled : homeStyle.button}
+         disabled ={ !validAmount || !category ? true : false}
+         >
+          <Text style ={homeStyle.buttonText}>Add</Text>
         </TouchableOpacity>
       </View>
       <FlatList
@@ -93,4 +104,20 @@ const homeStyle = StyleSheet.create({
     backgroundColor: '#ffffff',
     marginVertical: 15,
   },
+
+  button:{
+backgroundColor:'#33ffcc',
+padding: 10,
+boirderRadius : 10,
+
+  },
+   buttonDisaled : {
+backgroundColor: '#c0f9eb',
+padding : 10,
+borderRadius:10,
+   },
+  buttonText :{
+    textAlign :'center',
+    color:'#333333',
+  }
 })

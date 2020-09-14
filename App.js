@@ -18,6 +18,8 @@ import { DetailScreen } from './components/DetailScreen'
 import { AuthScreen } from './components/AuthScreen'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+// const Data = []
+
 const Data = [
   {
     "amount": 50,
