@@ -29,6 +29,7 @@ return (
       <Modal
         animationType="slide"
         visible = {visible}
+        transparent ={true}
       >
         <View style={selectStyles.modalView}>
           <ScrollView>
